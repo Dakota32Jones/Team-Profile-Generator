@@ -51,49 +51,122 @@ async function main() {
 // adding inquirer prompts to collect the data from user when using application
 
 async function prompt() {
-    let responseDone = "";
+  let responseDone = "";
 
-    do {
-        try {
-            console.log("----------------");
-            let response = await inquirer.prompt([
-                {
-                    type: "input",
-                    name: "name",
-                    message: "What is the employee's Name?",
-                    validate: function validateName(name) {
-                        return name !==;
-                    }
-                },
-                {
-                    type: "input",
-                    name: "name",
-                    message: "Please enter Employee ID: ",
-                    validate: function validateName(name) {
-                        return name !==;
-                    }
+  do {
+    try {
+      console.log("----------------");
+      let response = await inquirer.prompt([
+        {
+          type: "input",
+          name: "name",
+          message: "What is the employee's Name?",
+          validate: function validateName(name) {
+            return name !== "";
+          },
+        },
+        {
+          type: "input",
+          name: "name",
+          message: "Please enter Employee ID: ",
+          validate: function validateName(name) {
+            return name !== "";
+          },
+        },
+        {
+          type: "input",
+          name: "name",
+          message: "Please enter the employee's email address: ",
+          // have to validate using email-validator
+          validate: function validateName(name) {
+            return validator.validate(name);
+          },
+        },
+        {
+          type: "list",
+          name: "name",
+          message: "Please enter the employee's role: ",
+          choices: ["Engineer", "Intern", "Manager"],
+        },
+      ]);
 
-                },
-                {
-                    type: "input",
-                    name: "name",
-                    message: "Please enter the employee's email address: ",
-                    // have to validate using email-validator
-                    validate: function validateName(name) {
-                        return validator.validate(name);
-                    }
-                },
-                {
-                    type: "list",
-                    name: "name",
-                    message: "Please enter the employee's role: ",
-                    choices: [
-                        "Engineer",
-                        "Intern", 
-                        "Manager"
-                    ]
-                } 
-            ]);
-        }
+      let response2 = "";
+
+      if (response.role === "Engineer") {
+        response2 = await inquirer.prompt([
+          {
+            type: "input",
+            name: "x",
+            message: "What is the employees github username?: ",
+            validate: function validateName(name) {
+              return name !== "";
+            },
+          },
+        ]);
+        //   add to team array
+
+        const engineer = new Engineer(
+          response.name,
+          response.id,
+          response.email,
+          response2.x
+        );
+        teamArray.push(engineer);
+      } else if (response.role === "Manager") {
+        response2 = await inquirer.prompt([
+          {
+            type: "input",
+            name: "x",
+            message: "What is the employee's office number?: ",
+            validate: function validateName(name) {
+              return name !== "";
+            },
+          },
+        ]);
+
+        // add to team array
+        const manager = new Manager(
+          response.name,
+          response.id,
+          response.email,
+          response2.x
+        );
+        teamArray.push(manager);
+      } else if (response.role === "Intern") {
+        response2 = await inquirer.prompt([
+          {
+            type: "input",
+            name: "x",
+            message: "What school is the employee attending?: ",
+            validate: function validateName(name) {
+              return name !== "";
+            },
+          },
+        ]);
+
+        // add to team array
+        const intern = new Intern(
+          response.name,
+          response.id,
+          response.email,
+          response2.x
+        );
+        teamArray.push(intern);
+      }
+    } catch (err) {
+      return console.log(err);
     }
+    responseDone = await inquirer.prompt([
+      {
+        type: "list",
+        name: "finish",
+        message: "Would you like to continue?: ",
+        choices: ["Yes", "No"],
+      },
+    ]);
+  } while (responseDone.finish === "Yes");
 }
+
+// start and run program
+
+main();
