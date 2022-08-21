@@ -47,3 +47,53 @@ async function main() {
     return console.log(err);
   }
 }
+
+// adding inquirer prompts to collect the data from user when using application
+
+async function prompt() {
+    let responseDone = "";
+
+    do {
+        try {
+            console.log("----------------");
+            let response = await inquirer.prompt([
+                {
+                    type: "input",
+                    name: "name",
+                    message: "What is the employee's Name?",
+                    validate: function validateName(name) {
+                        return name !==;
+                    }
+                },
+                {
+                    type: "input",
+                    name: "name",
+                    message: "Please enter Employee ID: ",
+                    validate: function validateName(name) {
+                        return name !==;
+                    }
+
+                },
+                {
+                    type: "input",
+                    name: "name",
+                    message: "Please enter the employee's email address: ",
+                    // have to validate using email-validator
+                    validate: function validateName(name) {
+                        return validator.validate(name);
+                    }
+                },
+                {
+                    type: "list",
+                    name: "name",
+                    message: "Please enter the employee's role: ",
+                    choices: [
+                        "Engineer",
+                        "Intern", 
+                        "Manager"
+                    ]
+                } 
+            ]);
+        }
+    }
+}
