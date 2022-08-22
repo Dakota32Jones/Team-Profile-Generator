@@ -32,7 +32,7 @@ async function main() {
     //call generate function to generate the html template literal
 
     //write file
-    writeFileAsync("./dist/index.html", finalHTML);
+    writeFileAsync("./src/index.html", finalHTML);
   } catch (err) {
     return console.log(err);
   }
